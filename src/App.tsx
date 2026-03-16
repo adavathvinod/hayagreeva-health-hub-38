@@ -12,6 +12,7 @@ import BBAPage from "./pages/BBAPage";
 import PGDMPage from "./pages/PGDMPage";
 import PlacementsPage from "./pages/PlacementsPage";
 import ContactPage from "./pages/ContactPage";
+import AboutPage from "./pages/AboutPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
