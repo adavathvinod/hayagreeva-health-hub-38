@@ -3,16 +3,40 @@ import { Link, useLocation } from "react-router-dom";
 import { ChevronDown, Menu, X } from "lucide-react";
 import logo from "@/assets/logo.png";
 
-const navItems = [
-  { label: "Home", path: "/" },
-  {
-    label: "Explore ASB",
-    children: [
-      { label: "About ASB", path: "/#about" },
-      { label: "Campus Facilities", path: "/#campus" },
-      { label: "Awards & Recognition", path: "/#awards" },
+const megaMenuItems = {
+  "Explore ASB": {
+    sections: [
+      {
+        heading: "Why Choose Us",
+        links: [
+          { label: "About ASB", path: "/about#about" },
+          { label: "Vision & Mission", path: "/about#vision-mission" },
+          { label: "Leadership Messages", path: "/about#leadership" },
+        ],
+      },
+      {
+        heading: "Our People",
+        links: [
+          { label: "Governing Council", path: "/about#governing-council" },
+          { label: "Academic Council", path: "/about#academic-council" },
+          { label: "Our Faculty", path: "/about#faculty" },
+        ],
+      },
+      {
+        heading: "Excellence",
+        links: [
+          { label: "Research & Consulting", path: "/about#research" },
+          { label: "Campus Facilities", path: "/#campus" },
+          { label: "Awards & Recognition", path: "/#awards" },
+        ],
+      },
     ],
   },
+};
+
+const navItems = [
+  { label: "Home", path: "/" },
+  { label: "Explore ASB", megaMenu: true },
   {
     label: "Why ASB",
     children: [
@@ -68,7 +92,46 @@ const Navbar = () => {
         {/* Desktop Nav */}
         <div className="hidden lg:flex items-center gap-1">
           {navItems.map((item) =>
-            item.children ? (
+            (item as any).megaMenu ? (
+              <div
+                key={item.label}
+                className="relative group"
+                onMouseEnter={() => setOpenDropdown(item.label)}
+                onMouseLeave={() => setOpenDropdown(null)}
+              >
+                <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-foreground hover:text-primary transition-colors">
+                  {item.label}
+                  <ChevronDown className="h-3.5 w-3.5" />
+                </button>
+                {openDropdown === item.label && (
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 bg-background border border-border rounded-xl shadow-xl py-6 px-8 min-w-[600px]">
+                    <div className="grid grid-cols-3 gap-6">
+                      {megaMenuItems[item.label as keyof typeof megaMenuItems]?.sections.map((section) => (
+                        <div key={section.heading}>
+                          <p className="text-xs font-bold text-primary uppercase tracking-widest mb-3">{section.heading}</p>
+                          <div className="space-y-1">
+                            {section.links.map((link) => (
+                              <Link
+                                key={link.label}
+                                to={link.path}
+                                className="block px-3 py-2 text-sm text-foreground hover:bg-secondary hover:text-primary rounded-lg transition-colors"
+                              >
+                                {link.label}
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="mt-4 pt-4 border-t border-border">
+                      <Link to="/about" className="text-sm font-semibold text-primary hover:underline">
+                        View Full About Page →
+                      </Link>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (item as any).children ? (
               <div
                 key={item.label}
                 className="relative group"
@@ -81,7 +144,7 @@ const Navbar = () => {
                 </button>
                 {openDropdown === item.label && (
                   <div className="absolute top-full left-0 bg-background border border-border rounded-lg shadow-lg py-2 min-w-[220px]">
-                    {item.children.map((child) => (
+                    {(item as any).children.map((child: any) => (
                       <Link
                         key={child.label}
                         to={child.path}
@@ -96,7 +159,7 @@ const Navbar = () => {
             ) : (
               <Link
                 key={item.label}
-                to={item.path}
+                to={item.path!}
                 className="px-3 py-2 text-sm font-medium text-foreground hover:text-primary transition-colors"
               >
                 {item.label}
@@ -124,7 +187,34 @@ const Navbar = () => {
       {mobileOpen && (
         <div className="lg:hidden bg-background border-t border-border max-h-[80vh] overflow-y-auto">
           {navItems.map((item) =>
-            item.children ? (
+            (item as any).megaMenu ? (
+              <div key={item.label}>
+                <button
+                  onClick={() => setOpenDropdown(openDropdown === item.label ? null : item.label)}
+                  className="flex items-center justify-between w-full px-6 py-3 text-sm font-medium text-foreground"
+                >
+                  {item.label}
+                  <ChevronDown className={`h-4 w-4 transition-transform ${openDropdown === item.label ? "rotate-180" : ""}`} />
+                </button>
+                {openDropdown === item.label && (
+                  <div className="bg-secondary px-6 py-4 space-y-4">
+                    {megaMenuItems[item.label as keyof typeof megaMenuItems]?.sections.map((section) => (
+                      <div key={section.heading}>
+                        <p className="text-xs font-bold text-primary uppercase tracking-widest mb-2">{section.heading}</p>
+                        {section.links.map((link) => (
+                          <Link key={link.label} to={link.path} className="block px-4 py-2 text-sm text-muted-foreground hover:text-primary">
+                            {link.label}
+                          </Link>
+                        ))}
+                      </div>
+                    ))}
+                    <Link to="/about" className="block px-4 py-2 text-sm font-semibold text-primary">
+                      View Full About Page →
+                    </Link>
+                  </div>
+                )}
+              </div>
+            ) : (item as any).children ? (
               <div key={item.label}>
                 <button
                   onClick={() => setOpenDropdown(openDropdown === item.label ? null : item.label)}
@@ -135,7 +225,7 @@ const Navbar = () => {
                 </button>
                 {openDropdown === item.label && (
                   <div className="bg-secondary">
-                    {item.children.map((child) => (
+                    {(item as any).children.map((child: any) => (
                       <Link key={child.label} to={child.path} className="block px-10 py-2.5 text-sm text-muted-foreground hover:text-primary">
                         {child.label}
                       </Link>
@@ -144,7 +234,7 @@ const Navbar = () => {
                 )}
               </div>
             ) : (
-              <Link key={item.label} to={item.path} className="block px-6 py-3 text-sm font-medium text-foreground hover:text-primary">
+              <Link key={item.label} to={item.path!} className="block px-6 py-3 text-sm font-medium text-foreground hover:text-primary">
                 {item.label}
               </Link>
             )
