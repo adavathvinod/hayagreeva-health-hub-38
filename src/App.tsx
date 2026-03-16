@@ -10,6 +10,12 @@ import ScrollToTop from "@/components/ScrollToTop";
 import Index from "./pages/Index";
 import BBAPage from "./pages/BBAPage";
 import PGDMPage from "./pages/PGDMPage";
+import PGDMSecuritiesPage from "./pages/PGDMSecuritiesPage";
+import PGDMAIDataSciencePage from "./pages/PGDMAIDataSciencePage";
+import PGDMMarketingPage from "./pages/PGDMMarketingPage";
+import PGDMFinancePage from "./pages/PGDMFinancePage";
+import PGDMHRPage from "./pages/PGDMHRPage";
+import PGDMAgriBizPage from "./pages/PGDMAgriBizPage";
 import PlacementsPage from "./pages/PlacementsPage";
 import ContactPage from "./pages/ContactPage";
 import AboutPage from "./pages/AboutPage";
@@ -29,6 +35,12 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/bba" element={<BBAPage />} />
           <Route path="/pgdm" element={<PGDMPage />} />
+          <Route path="/pgdm/securities-markets" element={<PGDMSecuritiesPage />} />
+          <Route path="/pgdm/ai-data-science" element={<PGDMAIDataSciencePage />} />
+          <Route path="/pgdm/marketing-analytics" element={<PGDMMarketingPage />} />
+          <Route path="/pgdm/finance-fintech" element={<PGDMFinancePage />} />
+          <Route path="/pgdm/hr-analytics" element={<PGDMHRPage />} />
+          <Route path="/pgdm/agri-business" element={<PGDMAgriBizPage />} />
           <Route path="/placements" element={<PlacementsPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/about" element={<AboutPage />} />
