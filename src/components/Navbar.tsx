@@ -34,6 +34,17 @@ const megaMenuItems = {
   },
 };
 
+const programsChildren = [
+  { label: "BBA Program", path: "/bba" },
+  { label: "PGDM Overview", path: "/pgdm" },
+  { label: "PGDM – Securities Markets", path: "/pgdm/securities-markets" },
+  { label: "PGDM – AI & Data Science", path: "/pgdm/ai-data-science" },
+  { label: "PGDM – Marketing with Analytics", path: "/pgdm/marketing-analytics" },
+  { label: "PGDM – Finance with FinTech", path: "/pgdm/finance-fintech" },
+  { label: "PGDM – HR with HR Analytics", path: "/pgdm/hr-analytics" },
+  { label: "PGDM – Agri-Business Management", path: "/pgdm/agri-business" },
+];
+
 const navItems = [
   { label: "Home", path: "/" },
   { label: "Explore ASB", megaMenu: true },
@@ -47,10 +58,7 @@ const navItems = [
   },
   {
     label: "Programs",
-    children: [
-      { label: "BBA Program", path: "/bba" },
-      { label: "PGDM Program", path: "/pgdm" },
-    ],
+    children: programsChildren,
   },
   { label: "Placements", path: "/placements" },
   { label: "Admissions", path: "/pgdm#admissions" },
@@ -143,7 +151,7 @@ const Navbar = () => {
                   <ChevronDown className="h-3.5 w-3.5" />
                 </button>
                 {openDropdown === item.label && (
-                  <div className="absolute top-full left-0 bg-background border border-border rounded-lg shadow-lg py-2 min-w-[220px]">
+                  <div className="absolute top-full left-0 bg-background border border-border rounded-lg shadow-lg py-2 min-w-[260px]">
                     {(item as any).children.map((child: any) => (
                       <Link
                         key={child.label}
