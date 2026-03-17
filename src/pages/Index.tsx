@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import SectionFadeIn from "@/components/SectionFadeIn";
 import ParallaxSection from "@/components/ParallaxSection";
+import PlacementCarousel from "@/components/PlacementCarousel";
 import campusBuilding from "@/assets/campus-building.png";
 import campusCafeteria from "@/assets/campus-cafeteria.png";
 import campusHub from "@/assets/campus-hub.png";
@@ -151,6 +152,9 @@ const Index = () => {
           </SectionFadeIn>
         </div>
       </ParallaxSection>
+
+      {/* Placement Success Stories */}
+      <PlacementCarousel />
 
       {/* Programs */}
       <section className="section-padding bg-background">
