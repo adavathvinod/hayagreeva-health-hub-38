@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ChevronDown, Menu, X } from "lucide-react";
+import { ChevronDown, Menu, X, Search } from "lucide-react";
 import logo from "@/assets/logo.png";
 
 const megaMenuItems = {
@@ -45,9 +45,23 @@ const programsChildren = [
   { label: "PGDM – Agri-Business Management", path: "/pgdm/agri-business" },
 ];
 
-const navItems = [
+// Top bar links
+const topBarLinks = [
+  { label: "Campus Visit", path: "/contact" },
+  { label: "Blog", path: "/blog" },
+  { label: "Careers", path: "/contact" },
+  { label: "News & Events", path: "/news-events" },
+  { label: "Contact Us", path: "/contact" },
+];
+
+// Main nav items (bottom row)
+const mainNavItems = [
   { label: "Home", path: "/" },
-  { label: "Explore ASB", megaMenu: true },
+  { label: "About Us", megaMenu: true, megaKey: "Explore ASB" },
+  {
+    label: "Programs",
+    children: programsChildren,
+  },
   {
     label: "Why ASB",
     children: [
@@ -56,20 +70,15 @@ const navItems = [
       { label: "Industry Experts", path: "/bba#experts" },
     ],
   },
-  {
-    label: "Programs",
-    children: programsChildren,
-  },
   { label: "Placements", path: "/placements" },
-  { label: "News & Events", path: "/news-events" },
-  { label: "Blog", path: "/blog" },
-  { label: "Contact Us", path: "/contact" },
+  { label: "Campus Life", path: "/#campus" },
 ];
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [searchOpen, setSearchOpen] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -81,121 +90,182 @@ const Navbar = () => {
   useEffect(() => {
     setMobileOpen(false);
     setOpenDropdown(null);
+    setSearchOpen(false);
   }, [location]);
 
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-background/95 backdrop-blur-md shadow-sm py-2" : "bg-background py-4"
+        scrolled ? "shadow-md" : ""
       }`}
     >
-      <div className="container-wide flex items-center justify-between px-4">
-        <Link to="/" className="flex items-center gap-2">
-          <img src={logo} alt="Ashoka School of Business" className="h-12 w-auto" />
-          <div className="hidden sm:block">
-            <p className="font-display font-bold text-sm leading-tight text-foreground">Ashoka School</p>
-            <p className="font-display font-bold text-sm leading-tight text-primary">of Business</p>
-          </div>
-        </Link>
-
-        {/* Desktop Nav */}
-        <div className="hidden lg:flex items-center gap-1">
-          {navItems.map((item) =>
-            (item as any).megaMenu ? (
-              <div
-                key={item.label}
-                className="relative group"
-                onMouseEnter={() => setOpenDropdown(item.label)}
-                onMouseLeave={() => setOpenDropdown(null)}
+      {/* TOP BAR */}
+      <div className={`bg-foreground text-background transition-all duration-300 ${scrolled ? "py-1" : "py-2"}`}>
+        <div className="container-wide flex items-center justify-between px-4">
+          <div className="hidden md:flex items-center gap-1">
+            {topBarLinks.map((link) => (
+              <Link
+                key={link.label}
+                to={link.path}
+                className="px-3 py-1 text-xs font-medium uppercase tracking-wider text-background/80 hover:text-background transition-colors"
               >
-                <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-foreground hover:text-primary transition-colors">
-                  {item.label}
-                  <ChevronDown className="h-3.5 w-3.5" />
+                {link.label}
+              </Link>
+            ))}
+          </div>
+          <div className="flex items-center gap-3 ml-auto">
+            {/* Search */}
+            <div className="hidden md:flex items-center">
+              {searchOpen ? (
+                <div className="flex items-center border border-background/30 rounded-full px-3 py-1 bg-background/10">
+                  <input
+                    type="text"
+                    placeholder="Search..."
+                    className="bg-transparent text-background text-xs placeholder:text-background/50 outline-none w-32"
+                    autoFocus
+                  />
+                  <button onClick={() => setSearchOpen(false)}>
+                    <X className="h-3.5 w-3.5 text-background/60" />
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => setSearchOpen(true)}
+                  className="flex items-center gap-1.5 border border-background/30 rounded-full px-3 py-1 text-xs text-background/70 hover:text-background hover:border-background/50 transition-colors"
+                >
+                  <span>Search...</span>
+                  <Search className="h-3.5 w-3.5" />
                 </button>
-                {openDropdown === item.label && (
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 bg-background border border-border rounded-xl shadow-xl py-6 px-8 min-w-[600px]">
-                    <div className="grid grid-cols-3 gap-6">
-                      {megaMenuItems[item.label as keyof typeof megaMenuItems]?.sections.map((section) => (
-                        <div key={section.heading}>
-                          <p className="text-xs font-bold text-primary uppercase tracking-widest mb-3">{section.heading}</p>
-                          <div className="space-y-1">
-                            {section.links.map((link) => (
-                              <Link
-                                key={link.label}
-                                to={link.path}
-                                className="block px-3 py-2 text-sm text-foreground hover:bg-secondary hover:text-primary rounded-lg transition-colors"
-                              >
-                                {link.label}
-                              </Link>
-                            ))}
+              )}
+            </div>
+            <Link
+              to="/contact"
+              className="px-4 py-1.5 bg-primary text-primary-foreground text-xs font-bold uppercase tracking-wider rounded-full hover:bg-primary/90 transition-colors"
+            >
+              Apply Now
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* MAIN NAV BAR */}
+      <div className={`bg-background border-b border-border transition-all duration-300 ${scrolled ? "py-1" : "py-3"}`}>
+        <div className="container-wide flex items-center justify-between px-4">
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-2 shrink-0">
+            <img src={logo} alt="Ashoka School of Business" className={`w-auto transition-all duration-300 ${scrolled ? "h-10" : "h-12"}`} />
+            <div className="hidden sm:block">
+              <p className="font-display font-bold text-sm leading-tight text-foreground">Ashoka School</p>
+              <p className="font-display font-bold text-sm leading-tight text-primary">of Business</p>
+            </div>
+          </Link>
+
+          {/* Desktop Main Nav */}
+          <div className="hidden lg:flex items-center gap-0.5">
+            {mainNavItems.map((item) =>
+              (item as any).megaMenu ? (
+                <div
+                  key={item.label}
+                  className="relative group"
+                  onMouseEnter={() => setOpenDropdown(item.label)}
+                  onMouseLeave={() => setOpenDropdown(null)}
+                >
+                  <button className="flex items-center gap-1 px-3 py-2 text-sm font-semibold text-foreground hover:text-primary transition-colors">
+                    {item.label}
+                    <ChevronDown className="h-3.5 w-3.5" />
+                  </button>
+                  {openDropdown === item.label && (
+                    <div className="absolute top-full left-1/2 -translate-x-1/2 bg-background border border-border rounded-xl shadow-xl py-6 px-8 min-w-[600px]">
+                      <div className="grid grid-cols-3 gap-6">
+                        {megaMenuItems[(item as any).megaKey as keyof typeof megaMenuItems]?.sections.map((section) => (
+                          <div key={section.heading}>
+                            <p className="text-xs font-bold text-primary uppercase tracking-widest mb-3">{section.heading}</p>
+                            <div className="space-y-1">
+                              {section.links.map((link) => (
+                                <Link
+                                  key={link.label}
+                                  to={link.path}
+                                  className="block px-3 py-2 text-sm text-foreground hover:bg-secondary hover:text-primary rounded-lg transition-colors"
+                                >
+                                  {link.label}
+                                </Link>
+                              ))}
+                            </div>
                           </div>
-                        </div>
+                        ))}
+                      </div>
+                      <div className="mt-4 pt-4 border-t border-border">
+                        <Link to="/about" className="text-sm font-semibold text-primary hover:underline">
+                          View Full About Page →
+                        </Link>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : (item as any).children ? (
+                <div
+                  key={item.label}
+                  className="relative group"
+                  onMouseEnter={() => setOpenDropdown(item.label)}
+                  onMouseLeave={() => setOpenDropdown(null)}
+                >
+                  <button className="flex items-center gap-1 px-3 py-2 text-sm font-semibold text-foreground hover:text-primary transition-colors">
+                    {item.label}
+                    <ChevronDown className="h-3.5 w-3.5" />
+                  </button>
+                  {openDropdown === item.label && (
+                    <div className="absolute top-full left-0 bg-background border border-border rounded-lg shadow-lg py-2 min-w-[260px]">
+                      {(item as any).children.map((child: any) => (
+                        <Link
+                          key={child.label}
+                          to={child.path}
+                          className="block px-4 py-2.5 text-sm text-foreground hover:bg-secondary hover:text-primary transition-colors"
+                        >
+                          {child.label}
+                        </Link>
                       ))}
                     </div>
-                    <div className="mt-4 pt-4 border-t border-border">
-                      <Link to="/about" className="text-sm font-semibold text-primary hover:underline">
-                        View Full About Page →
-                      </Link>
-                    </div>
-                  </div>
-                )}
-              </div>
-            ) : (item as any).children ? (
-              <div
-                key={item.label}
-                className="relative group"
-                onMouseEnter={() => setOpenDropdown(item.label)}
-                onMouseLeave={() => setOpenDropdown(null)}
-              >
-                <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-foreground hover:text-primary transition-colors">
+                  )}
+                </div>
+              ) : (
+                <Link
+                  key={item.label}
+                  to={item.path!}
+                  className="px-3 py-2 text-sm font-semibold text-foreground hover:text-primary transition-colors"
+                >
                   {item.label}
-                  <ChevronDown className="h-3.5 w-3.5" />
-                </button>
-                {openDropdown === item.label && (
-                  <div className="absolute top-full left-0 bg-background border border-border rounded-lg shadow-lg py-2 min-w-[260px]">
-                    {(item as any).children.map((child: any) => (
-                      <Link
-                        key={child.label}
-                        to={child.path}
-                        className="block px-4 py-2.5 text-sm text-foreground hover:bg-secondary hover:text-primary transition-colors"
-                      >
-                        {child.label}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ) : (
-              <Link
-                key={item.label}
-                to={item.path!}
-                className="px-3 py-2 text-sm font-medium text-foreground hover:text-primary transition-colors"
-              >
-                {item.label}
-              </Link>
-            )
-          )}
-          <Link
-            to="/contact"
-            className="ml-2 px-5 py-2 bg-primary text-primary-foreground text-sm font-semibold rounded-lg hover:bg-primary/90 transition-colors"
-          >
-            Apply Now
-          </Link>
-        </div>
+                </Link>
+              )
+            )}
+          </div>
 
-        {/* Mobile toggle */}
-        <button
-          className="lg:hidden p-2 text-foreground"
-          onClick={() => setMobileOpen(!mobileOpen)}
-        >
-          {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
+          {/* Mobile toggle */}
+          <button
+            className="lg:hidden p-2 text-foreground"
+            onClick={() => setMobileOpen(!mobileOpen)}
+          >
+            {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Nav */}
       {mobileOpen && (
         <div className="lg:hidden bg-background border-t border-border max-h-[80vh] overflow-y-auto">
-          {navItems.map((item) =>
+          {/* Mobile top links */}
+          <div className="flex flex-wrap gap-1 px-4 py-3 border-b border-border bg-secondary">
+            {topBarLinks.map((link) => (
+              <Link
+                key={link.label}
+                to={link.path}
+                className="px-3 py-1.5 text-xs font-medium uppercase tracking-wider text-muted-foreground hover:text-primary"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+
+          {mainNavItems.map((item) =>
             (item as any).megaMenu ? (
               <div key={item.label}>
                 <button
@@ -207,7 +277,7 @@ const Navbar = () => {
                 </button>
                 {openDropdown === item.label && (
                   <div className="bg-secondary px-6 py-4 space-y-4">
-                    {megaMenuItems[item.label as keyof typeof megaMenuItems]?.sections.map((section) => (
+                    {megaMenuItems[(item as any).megaKey as keyof typeof megaMenuItems]?.sections.map((section) => (
                       <div key={section.heading}>
                         <p className="text-xs font-bold text-primary uppercase tracking-widest mb-2">{section.heading}</p>
                         {section.links.map((link) => (
