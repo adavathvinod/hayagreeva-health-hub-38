@@ -61,7 +61,8 @@ const navItems = [
     children: programsChildren,
   },
   { label: "Placements", path: "/placements" },
-  { label: "Admissions", path: "/pgdm#admissions" },
+  { label: "News & Events", path: "/news-events" },
+  { label: "Blog", path: "/blog" },
   { label: "Contact Us", path: "/contact" },
 ];
 

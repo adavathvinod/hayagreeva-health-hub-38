@@ -19,6 +19,8 @@ import PGDMAgriBizPage from "./pages/PGDMAgriBizPage";
 import PlacementsPage from "./pages/PlacementsPage";
 import ContactPage from "./pages/ContactPage";
 import AboutPage from "./pages/AboutPage";
+import NewsEventsPage from "./pages/NewsEventsPage";
+import BlogPage from "./pages/BlogPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -44,6 +46,8 @@ const App = () => (
           <Route path="/placements" element={<PlacementsPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/news-events" element={<NewsEventsPage />} />
+          <Route path="/blog" element={<BlogPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />
