@@ -153,6 +153,9 @@ const Index = () => {
         </div>
       </ParallaxSection>
 
+      {/* Placement Success Stories */}
+      <PlacementCarousel />
+
       {/* Programs */}
       <section className="section-padding bg-background">
         <div className="container-wide">
